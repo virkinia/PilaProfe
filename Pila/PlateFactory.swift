@@ -8,11 +8,24 @@
 
 import Foundation
 
+let platosPreparados = ["pizza", "sushi", "lasagna", "solomillo", "patatas", "ensalada", "pato", "rabo de toro", "lentejas", "hamburguesa", "espagueti", "paella", "fabada", "cocido", "tequeños"]
+
 class PlateFactory {
     
     static let shared = PlateFactory()
 
-    private var plateList = ["pizza", "sushi", "lasagna", "solomillo", "patatas", "ensalada", "pato", "rabo de toro", "lentejas", "hamburguesa", "espagueti", "paella", "fabada", "cocido", "tequeños"]
+    init() {
+
+        plateList = UserDefaults.standard.stringArray(forKey: "platosPreparados") ?? platosPreparados
+    }
+
+    deinit {
+     UserDefaults.standard.setValue(plateList, forKey: "platosPreparados")
+    }
+
+    
+
+    private var plateList: [Plate]
     
     var count: Int {
         return plateList.count
@@ -26,10 +39,15 @@ class PlateFactory {
     
     func insert(plate: String, at index: Int) {
         plateList.insert(plate, at: index)
+        UserDefaults.standard.setValue(plateList, forKey: "platosPreparados")
+
     }
     
     func removePlateAt(index: Int) -> Plate {
-        return plateList.remove(at: index)
+        let plato = plateList.remove(at: index)
+        UserDefaults.standard.setValue(plateList, forKey: "platosPreparados")
+        return plato
+
     }
     
     subscript(index: Int) -> Plate {
@@ -50,3 +68,4 @@ extension PlateFactory: RandomFactory {
     }
     
 }
+
