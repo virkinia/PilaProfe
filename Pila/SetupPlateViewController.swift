@@ -21,13 +21,7 @@ class SetupPlateViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        if let applicationDelegate = UIApplication.shared.delegate as? AppDelegate {
-//                applicationDelegate.pruebaLocalizarDelegate()
-//            
-//            // Aquí puedo acceder a los valores AppDelegate
-//        }
-        
+
         tblFood.delegate = self
         tblFood.dataSource = self
         
@@ -86,9 +80,16 @@ class SetupPlateViewController: UIViewController {
 extension SetupPlateViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
-        if let searchText = searchController.searchBar.text {
-            debugPrint("Han escrito \(searchText)")
+        if let searchText = plateSearcher.searchBar.text {
+            debugPrint("Texto que se busca \(searchText)")
+            platesFiltered = PlateFactory.shared.filter(text: searchText)
+
         }
+        tblFood.reloadData()
+    }
+
+    func isSearching() -> Bool {
+        return !(plateSearcher.searchBar.text?.isEmpty ?? true)
     }
 
 }
@@ -104,7 +105,11 @@ extension SetupPlateViewController: UITableViewDelegate {
 extension SetupPlateViewController: UITableViewDataSource {
     // UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return PlateFactory.shared.count
+        if isSearching() {
+            return platesFiltered.count
+        } else {
+             return PlateFactory.shared.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -112,12 +117,11 @@ extension SetupPlateViewController: UITableViewDataSource {
         let cellId = "FoodTableViewCellIdentifier"
         let tableViewCell = tableView.dequeueReusableCell(withIdentifier: cellId)
         if let foodTableViewCell = tableViewCell as? FoodTableViewCell {
-            
-//            let foodList = Food.shared.foodList
-//            let foodName = foodList[indexPath.row]
-//            foodTableViewCell.configure(info: foodName)
-            
-            foodTableViewCell.configure(info: PlateFactory.shared[indexPath.row])
+
+            let plate = isSearching() ? platesFiltered[indexPath.row] : PlateFactory.shared[indexPath.row]
+
+            foodTableViewCell.configure(info: plate)
+
             return foodTableViewCell
         }
         

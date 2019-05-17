@@ -167,9 +167,9 @@
                                                 <segue destination="g7C-UA-F0u" kind="unwind" identifier="unwindToMain" unwindAction="unwindFromSetupWithUnwindSegue:" id="ta9-vO-VY2"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="Save" id="Krs-Ov-YdY">
+                                        <barButtonItem key="rightBarButtonItem" title="Edit" id="Krs-Ov-YdY">
                                             <connections>
-                                                <action selector="btnSavePressed:" destination="u0z-JZ-JhG" id="mWt-kO-HHp"/>
+                                                <action selector="btnEditPressed:" destination="u0z-JZ-JhG" id="54r-bJ-9Ho"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
